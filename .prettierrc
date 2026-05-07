@@ -3,5 +3,8 @@
     "plugins": [
         "prettier-plugin-organize-imports",
         "prettier-plugin-tailwindcss"
-    ]
+    ],
+    "endOfLine": "lf",
+    "semi": true,
+    "tabWidth": 2
 }

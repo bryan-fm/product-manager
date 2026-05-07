@@ -8,6 +8,9 @@ services:
     container_name: product_manager
     restart: unless-stopped
     working_dir: /var/www
+    ports:
+      - "8001:8001"
+      - "5173:5173"
     volumes:
       - .:/var/www
     depends_on:
