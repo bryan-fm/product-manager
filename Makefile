@@ -20,6 +20,8 @@ setup:
 	docker compose exec app npm run build
 	docker compose exec app rm -f public/hot
 	docker compose exec app php artisan optimize:clear
+	docker compose exec app chmod -R 775 storage bootstrap/cache
+	docker compose exec app chown -R www-data:www-data storage bootstrap/cache
 
 up:
 	docker compose up -d
