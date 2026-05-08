@@ -24,9 +24,9 @@ class ProductFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'stock' => ['nullable', 'integer', 'min:0'],
-            'name' => ['nullable', 'string', 'max:255'],
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'name' => 'nullable|string|max:255|unique:products,name',
+            'price' => 'nullable|numeric|min:0.01',
+            'stock' => 'nullable|integer|min:0',
         ];
     }
 }
