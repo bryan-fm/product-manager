@@ -4,11 +4,27 @@ import Pagination from '@/Components/Pagination.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Eye, Pen, Trash } from 'lucide-vue-next';
-import { ref } from 'vue'; // Certifique-se de que está entre chaves {}
+import { ref } from 'vue';
+import inputFilters from '../../utils/inputFilters';
 
 const props = defineProps({
     products: Object,
+    filters: Object,
 });
+const search = ref(props.filters.search ?? '');
+const stock = ref(props.filters.stock ?? '');
+const price = ref(props.filters.price ?? '');
+
+const updateFilters = () => {
+    router.get(
+        '/products',
+        { search: search.value, stock: stock.value, price: price.value },
+        {
+            preserveState: true, // Keeps input focus and local state
+            replace: true, // Updates the current history entry instead of adding a new one
+        },
+    );
+};
 
 // Configuração estática do Header
 const headers = [
@@ -75,11 +91,59 @@ const confirmarExclusao = () => {
                         </Link>
                     </div>
 
+                    <div class="mb-6 flex items-center gap-4">
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            Filtros
+                        </h1>
+                        <div>
+                            <label
+                                class="mb-1 block text-sm font-medium text-gray-700"
+                            >
+                                Nome
+                            </label>
+                            <input
+                                v-model="search"
+                                placeholder="Filtrar por nome..."
+                                type="text"
+                                @focusout="updateFilters"
+                                class="mr-4"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="mb-1 block text-sm font-medium text-gray-700"
+                            >
+                                Estoque
+                            </label>
+                            <input
+                                v-model.number="stock"
+                                placeholder="Filtrar por estoque..."
+                                type="number"
+                                @keypress="inputFilters.onlyNumbers"
+                                @focusout="updateFilters"
+                                class="mr-4"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="mb-1 block text-sm font-medium text-gray-700"
+                            >
+                                Preço
+                            </label>
+                            <input
+                                v-model="price"
+                                placeholder="Filtrar por preço..."
+                                type="number"
+                                @keypress="inputFilters.onlyFloat"
+                                min="0.01"
+                                @focusout="updateFilters"
+                            />
+                        </div>
+                    </div>
                     <!-- Tabela Estilizada -->
                     <div
                         class="overflow-hidden rounded-lg border border-gray-200"
                     >
-                        <!-- Header -->
                         <div
                             class="flex border-b bg-gray-50 font-bold text-gray-700"
                         >
@@ -166,7 +230,6 @@ const confirmarExclusao = () => {
                             </div>
                         </div>
 
-                        <!-- Empty State -->
                         <div v-else class="py-12 text-center">
                             <p class="text-gray-500">
                                 Nenhum produto encontrado no sistema.
@@ -181,8 +244,6 @@ const confirmarExclusao = () => {
                 </div>
             </div>
         </div>
-
-        <!-- Modal de Confirmação Reutilizável -->
         <ConfirmationModal
             :show="showModal"
             title="Excluir Produto"

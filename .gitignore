@@ -1,30 +1,143 @@
-/vendor/
-node_modules/
-npm-debug.log
-yarn-error.log
+# =========================
+# Laravel
+# =========================
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
-
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
-storage/*.key
-.env
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
-
+/vendor
+/node_modules
 /public/build
-/storage/pail
-.env.backup
-.env.production
-.phpactor.json
+/public/hot
+/storage/*.key
+/storage/app/public
+/storage/debugbar
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
 auth.json
+
+# =========================
+# Environment files
+# =========================
+
+.env
+.env.*
+!.env.example
+
+# =========================
+# IDE / Editors
+# =========================
+
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# OS Files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Testing
+# =========================
+
+coverage/
+coverage-final.json
+.nyc_output/
+
+# Jest
+jest-html-reporters-attach/
+junit.xml
+
+# Pest / PHPUnit
+.phpunit.cache
+
+# =========================
+# Frontend Build
+# =========================
+
+dist/
+build/
+.cache/
+.tmp/
+
+# Vite
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+
+# =========================
+# TypeScript
+# =========================
+
+*.tsbuildinfo
+
+# =========================
+# Docker
+# =========================
+
+docker-compose.override.yml
+
+# =========================
+# Optional Runtime Files
+# =========================
+
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# Misc
+# =========================
+
+*.log
+*.sqlite
+*.bak
+*.tmp
+*.temp
+
+# =========================
+# Generated test snapshots
+# =========================
+
+__snapshots__/
+
+# =========================
+# Cypress / Playwright (if added later)
+# =========================
+
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+test-results/

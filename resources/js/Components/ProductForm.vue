@@ -1,8 +1,22 @@
-<script setup>
+<script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 
+interface Product {
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    errors: {
+        name?: string;
+        description?: string;
+        price?: string;
+        stock?: string;
+    };
+    processing: boolean;
+}
+
 defineProps({
-    form: Object,
+    form: Object as () => Product,
     submit: Function,
     buttonText: String,
     mode: {

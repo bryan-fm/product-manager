@@ -22,11 +22,10 @@ class ProductController extends Controller
         private ProductService $service
     ) {}
 
-    public function index(Request $request)
+    public function index(\App\Http\Requests\ProductFilterRequest $request)
     {
-        $products = $this->service->paginate($request->search);
+        $products = $this->service->paginate($request);
 
-        
         return $this->successResponse(
             $products,
             'Produtos listados com sucesso'

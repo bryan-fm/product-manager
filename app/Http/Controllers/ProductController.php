@@ -10,6 +10,7 @@ use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Enums\LogSource;
+use App\Http\Requests\ProductFilterRequest;
 
 class ProductController extends Controller
 {
@@ -17,14 +18,14 @@ class ProductController extends Controller
         private ProductService $service
     ) {}
 
-    public function index(Request $request)
+    public function index(ProductFilterRequest $request)
     {
 
         return Inertia::render('Products/Index', [
             'products' => $this->service->paginate(
-                $request->search
+                $request
             ),
-            'filters' => $request->only('search')
+            'filters' => $request->only('search', 'stock', 'price')
         ]);
     }
 
@@ -83,16 +84,4 @@ class ProductController extends Controller
         ]);
     }
 
-    public function changeStock(
-        ChangeStockRequest $request,
-        Product $product
-    ) {
-        $product = $this->service->changeStock(
-            $product,
-            $request->quantity,
-            $request->type
-        );
-
-        return back()->with('success', 'Stock updated');
-    }
 }

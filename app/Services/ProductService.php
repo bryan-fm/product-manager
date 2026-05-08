@@ -16,26 +16,23 @@ class ProductService
         private ProductRepositoryInterface $repository
     ) {}
 
-    public function paginate(?string $search = null): LengthAwarePaginator
+    public function paginate($request): LengthAwarePaginator
     {
-        $page = request()->query('page', 1);
-        $cache = Cache::get('products_paginate_' . $search . '_page_' . $page);
+        $page = $request->query('page', 1);
+        $key = 'products_paginate_' . $request->query('search') . '_stock_' . $request->query('stock') . '_price_' . $request->query('price') . '_page_' . $page;
+        $hash = hash('sha256', $key);
+        $cache = Cache::get($hash);
 
         if ($cache) {
             Log::info('Produtos recuperados do cache', [
-                'search' => $search,
+                'search' => $key,
                 'user_id' => auth()->id(),
                 'products' => count($cache->items()),
             ]);
             return $cache;
         }
-        $response =  Product::query()
-            ->when($search, fn ($query) =>
-                $query->where('name', 'like', "%{$search}%")
-            )
-            ->paginate(10, ['*'], 'page', $page)
-            ->withQueryString();
-        Cache::put('products_paginate_' . $search . '_page_' . $page, $response, now()->addHour(2));
+        $response =  $this->repository->paginate($request);
+        Cache::put($hash, $response, now()->addHour(2));
         return $response;
     }
 
@@ -45,11 +42,11 @@ class ProductService
 
         $product = $this->repository->create($data->toArray());
 
-            Log::info('Produto criado', [
-                'source' => $source->value,
-                'product_id' => $product->id,
-                'user_id' => auth()->id(),
-            ]);
+        Log::info('Produto criado', [
+            'source' => $source->value,
+            'product_id' => $product->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return $product;
     }
@@ -80,32 +77,5 @@ class ProductService
             'product_id' => $product->id,
             'user_id' => auth()->id(),
         ]);
-    }
-
-    public function changeStock(
-        Product $product,
-        int $quantity,
-        string $type
-        ): Product {
-
-        $newStock = $product->stock;
-
-        if ($type === 'increase') {
-            $newStock += $quantity;
-        }
-
-        if ($type === 'decrease') {
-
-            if ($product->stock < $quantity) {
-                throw new BusinessException('Insufficient stock');
-            }
-
-            $newStock -= $quantity;
-        }
-
-        return $this->repository->updateStock(
-            $product,
-            $newStock
-        );
     }
 }
