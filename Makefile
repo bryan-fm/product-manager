@@ -18,6 +18,7 @@ setup:
 	docker compose exec app php artisan key:generate
 	docker compose exec app php artisan migrate:fresh --seed
 	docker compose exec app npm run build
+	docker compose exec app rm -f public/hot
 	docker compose exec app php artisan optimize:clear
 
 up:

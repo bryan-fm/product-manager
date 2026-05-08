@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 
-interface Product {
+interface ProductForm {
     name: string;
     description: string;
-    price: number;
-    stock: number;
+    price: number | string;
+    stock: number | string;
     errors: {
         name?: string;
         description?: string;
@@ -15,19 +15,22 @@ interface Product {
     processing: boolean;
 }
 
-defineProps({
-    form: Object as () => Product,
-    submit: Function,
-    buttonText: String,
-    mode: {
-        type: String,
-        default: 'edit',
+withDefaults(
+    defineProps<{
+        form: ProductForm;
+        submit: () => void;
+        buttonText?: string;
+        mode?: 'create' | 'edit' | 'view';
+    }>(),
+    {
+        buttonText: 'Salvar',
+        mode: 'edit',
     },
-});
+);
 </script>
 
 <template>
-    <form @submit.prevent="submit" class="space-y-4">
+    <form @submit.prevent="submit()" class="space-y-4">
         <div>
             <label class="mb-1 block text-sm font-medium text-gray-700">
                 Nome
