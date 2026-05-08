@@ -1,19 +1,30 @@
 <script setup>
-defineProps({
+import ProductForm from '@/Components/ProductForm.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { useForm } from '@inertiajs/vue3';
+
+const props = defineProps({
     product: Object,
 });
+
+const form = useForm({
+    name: props.product.name,
+    description: props.product.description,
+    price: props.product.price,
+    stock: props.product.stock,
+});
+
+function submit() {
+    form.put(`/products/${props.product.id}`);
+}
 </script>
 
 <template>
-    <div>
-        <h1>{{ product.name }}</h1>
+    <AuthenticatedLayout>
+        <div class="p-6">
+            <h1 class="mb-4 text-2xl">Visualizar Produto</h1>
 
-        <p>{{ product.description }}</p>
-
-        <p>Preço: {{ product.price }}</p>
-
-        <p>Estoque: {{ product.stock }}</p>
-
-        <a href="/products">Voltar</a>
-    </div>
+            <ProductForm :form="form" :submit="() => {}" mode="view" />
+        </div>
+    </AuthenticatedLayout>
 </template>

@@ -11,5 +11,18 @@ bash: ## Open a bash shell in the application container
 
 up: ## Start the application using Docker Compose
 	docker compose up -d
+
 down: ## Stop the application using Docker Compose
 	docker compose down
+
+logs: ## View the application logs
+	docker compose logs -f
+
+migrate: ## Run database migrations
+	docker compose exec app php artisan migrate
+
+build: ## Build the Docker images
+	docker compose build
+
+build-no-cache: ## Build the Docker images without using cache
+	docker compose build --no-cache

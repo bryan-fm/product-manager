@@ -1,8 +1,13 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
-defineProps({
+const props = defineProps({
   links: Array,
+});
+
+onMounted(() => {
+  console.log('Links recebidos:', props.links);
 });
 </script>
 

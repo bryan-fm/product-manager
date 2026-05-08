@@ -34,4 +34,13 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product->delete();
     }
+
+    public function updateStock(Product $product, int $stock): Product
+{
+    $product->update([
+        'stock' => $stock
+    ]);
+
+    return $product->fresh();
+}
 }

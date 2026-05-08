@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Enums\LogSource;
 
 class ProductController extends Controller
 {
@@ -18,6 +19,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
+
         return Inertia::render('Products/Index', [
             'products' => $this->service->paginate(
                 $request->search
@@ -34,7 +36,8 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $this->service->create(
-            ProductData::fromArray($request->validated())
+            ProductData::fromArray($request->validated()),
+            LogSource::WEB
         );
 
         return redirect()
@@ -55,7 +58,8 @@ class ProductController extends Controller
     ) {
         $this->service->update(
             $product,
-            ProductData::fromArray($request->validated())
+            ProductData::fromArray($request->validated()),
+            LogSource::WEB
         );
 
         return redirect()
@@ -65,7 +69,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $this->service->delete($product);
+        $this->service->delete($product, LogSource::WEB);
 
         return redirect()
             ->route('products.index')
@@ -77,5 +81,18 @@ class ProductController extends Controller
         return Inertia::render('Products/Show', [
             'product' => $product
         ]);
+    }
+
+    public function changeStock(
+        ChangeStockRequest $request,
+        Product $product
+    ) {
+        $product = $this->service->changeStock(
+            $product,
+            $request->quantity,
+            $request->type
+        );
+
+        return back()->with('success', 'Stock updated');
     }
 }

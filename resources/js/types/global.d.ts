@@ -10,6 +10,21 @@ declare global {
 
     /* eslint-disable no-var */
     var route: typeof ziggyRoute;
+
+    interface PageProps extends InertiaPageProps {
+        auth: {
+            user: {
+                id: number;
+                name: string;
+                email: string;
+            };
+        };
+
+        flash: {
+            success?: string;
+            error?: string;
+        };
+    }
 }
 
 declare module 'vue' {
